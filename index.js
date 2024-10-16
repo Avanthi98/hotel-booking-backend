@@ -12,6 +12,11 @@ import mongoose from 'mongoose'
 
 //Import JWT
 import jwt from "jsonwebtoken"
+
+//Import and configurate dotenv
+import dotenv from "dotenv"
+dotenv.config()
+
 //Making the express app for backend
 const app=express()
 
@@ -19,13 +24,13 @@ const app=express()
 app.use(bodyParser.json())
 
 //Connect database connection string
-const dbConnectionString="mongodb+srv://tester2:321@cluster0.sqrki.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const dbConnectionString=process.env.MONGO_URL
 
 //Create authentication middleware
 app.use((req,res,next)=>{
     const token=req.header("Authorization")?.replace("Bearer","")
     if(token!=null){//If there is a token and token is correct
-        jwt.verify(token,"secret",
+        jwt.verify(token,process.env.JWT_KEY,
             (err,decoded)=>{
             if(decoded=!null){//If Decription successfull
                 req.user=decoded
