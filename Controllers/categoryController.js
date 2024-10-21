@@ -1,4 +1,5 @@
-import Category from "../Models/category.js";
+import Category from "../Models/categoryModel.js";
+import { isAdminValid } from "./userControllers.js";
 
 //Create category function
 export function createCategory(req,res){
@@ -115,7 +116,7 @@ export function updateCategory(req,res){
     
     if(!isAdminValid(req)){
         res.status(403).json({
-            message:"Unauthorized"
+            message:"Forbidden"
         })
         return;
     }
@@ -137,13 +138,3 @@ export function updateCategory(req,res){
 
 }
 
-//isAdminValid Function-->This function is used to reduce code redunduncy
-function isAdminValid(req){
-    if(req.user==null){
-        return false;
-    }
-    if(req.user.type!="admin"){
-        return false;
-    }
-        return true;
-}

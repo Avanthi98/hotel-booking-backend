@@ -105,3 +105,14 @@ export function deleteUsers(req,res){
             
         })
 }
+
+//isAdminValid Function-->This function is used to reduce code redunduncy
+export function isAdminValid(req){
+    if(req.user==null){
+        return false;
+    }
+    if(req.user.type!="admin"){
+        return false;
+    }
+        return true;
+}

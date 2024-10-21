@@ -5,6 +5,7 @@ import bodyParser from "body-parser"
 import userRouter from './Routes/usersRoute.js'
 import galleryItemRouter from './Routes/galleryItemsRoute.js'
 import categoryRouter from './Routes/categoryRoute.js'
+import roomRouter from './Routes/roomRoute.js'
 
 //Import mongoose-->no need to write in hands
 import mongoose from 'mongoose'
@@ -58,6 +59,7 @@ mongoose.connect(dbConnectionString).then(
 app.use("/api/users",userRouter)
 app.use("/api/gallery",galleryItemRouter)
 app.use("/api/category",categoryRouter)
+app.use("/api/room",roomRouter)
 
 //Starting the backend server
 app.listen(5000,(req,res)=>{
