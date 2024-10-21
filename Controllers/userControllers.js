@@ -70,7 +70,7 @@ export function loginUser(req, res) {
 
             res.status(200).json({
                 message: "User logged in successfully",
-                user: user,
+                user:user,
                 token: token,
             });
         });

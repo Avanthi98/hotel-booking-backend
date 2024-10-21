@@ -4,13 +4,13 @@ export function createGalleryItems(req,res){
     const user=req.user
     if(user==null){
         res.status(404).json({
-            message:"Unauthorizes User! Please log in to create gallery items"
+            message:"Unauthorized User! Please log in to create gallery items"
         })
         return;
     }
     if(user.type!="admin"){
         res.status(403).json({
-            message:"You are not authorized to create gallery items"
+            message:"Forbidden. You are not authorized to create gallery items"
         })
         return;
     }
@@ -30,7 +30,8 @@ export function createGalleryItems(req,res){
                 message:"Gallery Items creation failed"
             })
         }
-    )}
+    )
+}
 
     export function getGalleryItems(req,res){
         GalleryItem.find().then(

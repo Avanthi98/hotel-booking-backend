@@ -1,11 +1,10 @@
 import express from 'express'
 import bodyParser from "body-parser"
 
-//Importing userRouter-->"export default"
+//Importing Routers
 import userRouter from './Routes/usersRoute.js'
-
-//Importing galleryItemRouter
 import galleryItemRouter from './Routes/galleryItemsRoute.js'
+import categoryRouter from './Routes/categoryRoute.js'
 
 //Import mongoose-->no need to write in hands
 import mongoose from 'mongoose'
@@ -28,11 +27,11 @@ const dbConnectionString=process.env.MONGO_URL
 
 //Create authentication middleware
 app.use((req,res,next)=>{
-    const token=req.header("Authorization")?.replace("Bearer","")
+    const token=req.header("Authorization")?.replace("Bearer ","")//You must keep a space after word "Bearer "
     if(token!=null){//If there is a token and token is correct
         jwt.verify(token,process.env.JWT_KEY,
             (err,decoded)=>{
-            if(decoded=!null){//If Decription successfull
+            if(decoded!=null){//If Decription successfull
                 req.user=decoded
                 next()
             }else{
@@ -55,11 +54,10 @@ mongoose.connect(dbConnectionString).then(
     }
 )
 
-//Use userRouter
+//Use Routers
 app.use("/api/users",userRouter)
-
-//Use galleryItem router
 app.use("/api/gallery",galleryItemRouter)
+app.use("/api/category",categoryRouter)
 
 //Starting the backend server
 app.listen(5000,(req,res)=>{
