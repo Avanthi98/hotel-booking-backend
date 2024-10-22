@@ -116,3 +116,14 @@ export function isAdminValid(req){
     }
         return true;
 }
+
+//Check whether the user is a customer or not
+export function isCustomerValid(req){
+    if(req.user==null){
+        return false;
+    }
+    if(req.user.type!="customer"){
+        return false;
+    }
+    return true;
+}
