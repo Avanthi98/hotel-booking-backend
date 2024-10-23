@@ -49,3 +49,47 @@ export function makeABooking(req,res){
             }
         )
 }
+
+//Get and view all bookings-for admin
+export function getAllBookings(req,res){
+    const user=req.user;
+    if(user==null){
+        res.json({
+            message:"You are not authorized.Please log into the system"
+        })
+        return;
+    }
+
+    if(isCustomerValid(req,res)){
+    
+        Booking.find({clientEmail:req.user.email}).then(
+            (result)=>{
+                res.json({
+                    message:"Successfully loaded all your booking details",
+                    result:result
+                })
+            }
+        ).catch(
+            (err)=>{
+                res.json({
+                    message:"Failed to load your booking details"
+                })
+            }
+        )
+        return;
+    }
+    Booking.find().then(
+        (result)=>{
+            res.json({
+                message:"Booking details successfully loaded",
+                result:result
+            })
+        }
+    ).catch(
+        ()=>{
+            res.json({
+                message:"Booking details loading failed"
+            })
+        }
+    )
+}
