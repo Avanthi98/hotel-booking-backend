@@ -18,8 +18,14 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config()
 
+//Importing cors for giving access to any localhost request
+import cors from "cors"
+
 //Making the express app for backend
 const app=express()
+
+//Middleware for cors
+app.use(cors());
 
 //This is a pre-builded middleware
 app.use(bodyParser.json())
