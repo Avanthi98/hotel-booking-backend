@@ -2,16 +2,17 @@
 import express from 'express'
 
 //Importing User Functions from userControllers with only "export" (without "export default" keyword)
-import { getUsers,putUsers,deleteUsers, postUsers, loginUser } from '../Controllers/userControllers.js'
+import { getUsers,putUsers,deleteUsers, postUsers, loginUser, getOneUser } from '../Controllers/userControllers.js'
 //Making a router
 const userRouter=express.Router()
 
 //Making different types of requests
-userRouter.get("/",getUsers)  
+//userRouter.get("/",getUsers)  
 userRouter.post("/",postUsers)
 userRouter.put("/",putUsers)
 userRouter.delete("/",deleteUsers)
 userRouter.post("/login/",loginUser)
+userRouter.get("/",getOneUser)
 
 //Exporting the created userRouter
 export default userRouter; 

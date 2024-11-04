@@ -6,12 +6,39 @@ dotenv.config()
 
 //Function for Getting user list
 export function getUsers(req,res){
+    if(!isAdminValid(req)){
+        res.json({
+            message:"Forbidden"
+        })
+        return;
+    }
     User.find().then(
         (usersList)=>{
             res.json({
                 List:usersList
             })
         })
+}
+
+//Function for get user
+export function getOneUser(req,res){
+    const user=req.user;
+    if(user==null){
+        res.json(
+            {
+                message:"User not found"
+            }
+        )
+    }
+    else{
+        res.json(
+            {
+                message:"User found",
+                user:user
+            }
+        )
+    }
+
 }
 
 //Function for creating users
@@ -30,7 +57,11 @@ export function postUsers(req, res) {
         const newUser = new User(user);
         newUser.save()
             .then(() => {
-                res.json({ message: "User Created Successfully" });
+                res.json(
+                    { message: "User Created Successfully",
+                        user:user 
+
+                    });
             })
             .catch(() => {
                 res.status(500).json({ message: "User creation failed" });
