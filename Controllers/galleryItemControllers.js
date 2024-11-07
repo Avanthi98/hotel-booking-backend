@@ -40,7 +40,7 @@ export function createGalleryItems(req, res) {
             ).catch(
                 (err)=>{
                     res.json({
-                        message:"Gallery Event creatiion failed",
+                        message:"Gallery Event creation failed",
                         error:err
                     })
                 }
