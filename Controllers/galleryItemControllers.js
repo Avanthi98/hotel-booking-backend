@@ -17,22 +17,42 @@ export function createGalleryItems(req, res) {
     return;
   }
 
-  const galleryItem = req.body.item;
-  const newGalleryItem = new GalleryItem(galleryItem);
+  const startingId=100;
+    GalleryItem.countDocuments({}).then(
+        (count)=>{
+           const newId = startingId + count + 1; //countDocuments() function will return the count of database records
+            //So count variable will return the count
 
-  newGalleryItem
-    .save()
-    .then(() => {
-      res.json({
-        message: "Gallery Items saved successfully",
-      });
-    })
-    .catch((error) => {
-      res.json({
-        message: "Gallery Items creation failed",
-        error: error,
-      });
-    });
+            const newGalleryItem=new GalleryItem({
+                eventId:newId,
+                name:req.body.name,
+                image:req.body.image,
+                description:req.body.description
+            })
+
+            newGalleryItem.save().then(
+                (result)=>{
+                    res.json({
+                        message:"Galery Event created successfully",
+                        result:result
+                    })
+                }
+            ).catch(
+                (err)=>{
+                    res.json({
+                        message:"Gallery Event creatiion failed",
+                        error:err
+                    })
+                }
+            )
+        }
+        ).catch(
+            ()=>{
+                res.json({
+                    message:"Booking creation failed due to database connection failure"
+                })
+            }
+        )
 }
 
 //viewing gallery items
@@ -52,7 +72,7 @@ export function getGalletyItemById(req, res) {
     });
     return;
   }
-
+  
   const eventId = req.params.eventId;
   GalleryItem.findOne({ eventId: eventId })
     .then((result) => {
