@@ -49,7 +49,7 @@ export function createGalleryItems(req, res) {
         ).catch(
             ()=>{
                 res.json({
-                    message:"Booking creation failed due to database connection failure"
+                    message:"Gallery event creation failed due to database connection failure"
                 })
             }
         )
@@ -108,4 +108,28 @@ export function deleteGalleryItems(req, res) {
         message: "Failed to delete the gallery item",
       });
     });
+}
+//Update gallery Item
+export function updateGalleryItem(req,res){
+  if(!isAdminValid(req)){
+    res.json({
+      message:"Forbidden!"
+    })
+    return;
+  }
+  const id=req.params.eventId;
+  GalleryItem.updateOne({eventId:id},req.body).then(
+    ()=>{
+        res.json({
+            message:"Gallery Event updated successfully"
+        })
+    }
+).catch(
+    ()=>{
+        res.json({
+            message:"Failed to update the gallery event"
+        })
+    }
+)
+
 }
