@@ -148,9 +148,10 @@ export function retrieveBookingByDate(req, res) {
     Booking.find({
       start: {
         $gte: start,
-      },end:{
-        $lt:end
-      }
+      },
+      end: {
+        $lt: end,
+      },
     })
       .then((result) => {
         res.json({
@@ -171,3 +172,35 @@ export function retrieveBookingByDate(req, res) {
     });
   }
 }
+
+//Delete booking
+export function deleteBooking(req,res){
+  if(isAdminValid(req)){
+    const bookingId=req.params.bookingId;
+    Booking.findOneAndDelete({bookingId:bookingId}).then(
+      (result)=>{
+        res.json(
+          {
+            message:"Booking deleted successfully!",
+            res:result
+          }
+        )
+      }
+    ).catch(
+      (error)=>{
+        res.json({
+          message:"Failed to delete booking",
+          err:error
+        })
+      }
+    )
+    return;
+  }
+  else{
+    res.json({
+      message:"Forbidden"
+    })
+  }
+
+}
+
