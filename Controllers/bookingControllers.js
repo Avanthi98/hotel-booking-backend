@@ -1,4 +1,5 @@
 import Booking from "../Models/bookingModel.js";
+import Room from "../Models/roomModel.js";
 import { isAdminValid, isCustomerValid } from "./userControllers.js";
 
 //Make a booking function-Only for Customers
@@ -174,33 +175,101 @@ export function retrieveBookingByDate(req, res) {
 }
 
 //Delete booking
-export function deleteBooking(req,res){
-  if(isAdminValid(req)){
-    const bookingId=req.params.bookingId;
-    Booking.findOneAndDelete({bookingId:bookingId}).then(
-      (result)=>{
-        res.json(
-          {
-            message:"Booking deleted successfully!",
-            res:result
-          }
-        )
-      }
-    ).catch(
-      (error)=>{
+export function deleteBooking(req, res) {
+  if (isAdminValid(req)) {
+    const bookingId = req.params.bookingId;
+    Booking.findOneAndDelete({ bookingId: bookingId })
+      .then((result) => {
         res.json({
-          message:"Failed to delete booking",
-          err:error
-        })
-      }
-    )
+          message: "Booking deleted successfully!",
+          res: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          message: "Failed to delete booking",
+          err: error,
+        });
+      });
     return;
-  }
-  else{
+  } else {
     res.json({
-      message:"Forbidden"
-    })
+      message: "Forbidden",
+    });
   }
-
 }
 
+//Create booking without crashing
+export function createBookingUsingCategory(req, res) {
+  const start = new Date(req.body.start);
+  const end = new Date(req.body.end);
+  Booking.find({
+    $or: [
+      {
+        start: {
+          $gte: start,
+          $lt: end,
+        },
+      },
+      {
+        end: {
+          $gt: start,
+          $lte: end,
+        },
+      },
+    ],
+  }).then((response) => {
+    const overlappingBookings = response;
+    const rooms = [];
+    for (let i = 0; i < overlappingBookings.length; i++) {
+      rooms.push(overlappingBookings[i].roomId);
+    }
+    Room.find({
+      roomId: {
+        $nin: rooms,
+      },
+    }).then((rooms) => {
+      if (rooms.length == 0) {
+        res.json({
+          message: "No rooms available!!!",
+        });
+      } else {
+        const startingId = 1200;
+        Booking.countDocuments({})
+          .then((count) => {
+            const newId = startingId + count + 1; //countDocuments() function will return the count of database records
+            //So count variable will return the count
+
+            const newBooking = new Booking({
+              bookingId: newId,
+              roomId: rooms[0].roomId,
+              clientEmail: req.user.email,
+              start:start,
+              end:end,
+            });
+
+            newBooking
+              .save()
+              .then((result) => {
+                res.json({
+                  message: "Booking created successfully",
+                  result: result,
+                });
+              })
+              .catch((err) => {
+                res.json({
+                  message: "Booking creatiion failed",
+                  error: err,
+                });
+              });
+          })
+          .catch(() => {
+            res.json({
+              message:
+                "Booking creation failed due to database connection failure",
+            });
+          });
+      }
+    });
+  });
+}

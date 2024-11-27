@@ -26,7 +26,7 @@ const bookingSchema=new mongoose.Schema({
     status:{
         type:String,
         required:true,
-        default:"Pending"
+        default:"pending"
     },
     reason:{
         type:String,
