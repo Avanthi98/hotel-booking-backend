@@ -74,6 +74,26 @@ export function getAllFeedbacks(req, res) {
       });
     });
 }
-//Edit Feedbacks
+//Update feedback details-->Customers
+export function updateFeedbackDetails(req, res) {
+    if (!isCustomerValid(req)) {
+      res.json({
+        message: "Forbidden",
+      });
+      return;
+    }
+    const feedbackId = req.params.feedbackId;
+    Feedback.findOneAndUpdate({ feedbackId:feedbackId }, req.body)
+      .then(() => {
+        res.json({
+          message: "Feedback details updated successfully",
+        });
+      })
+      .catch(() => {
+        res.json({
+          message: "Failed to update feedback details",
+        });
+      });
+  }
 
 //Delete feedbacks
