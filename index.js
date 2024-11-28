@@ -7,6 +7,7 @@ import galleryItemRouter from "./Routes/galleryItemsRoute.js";
 import categoryRouter from "./Routes/categoryRoute.js";
 import roomRouter from "./Routes/roomRoute.js";
 import bookingRouter from "./Routes/bookingRoute.js";
+import feedbackRouter from "./Routes/feedbackRoute.js";
 
 //Import mongoose-->no need to write in hands
 import mongoose from "mongoose";
@@ -68,6 +69,7 @@ app.use("/api/gallery", galleryItemRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/booking", bookingRouter);
+app.use("/api/feedback", feedbackRouter);
 
 //Starting the backend server
 app.listen(5000, (req, res) => {

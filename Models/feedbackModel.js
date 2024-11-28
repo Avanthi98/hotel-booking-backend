@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const feedbackSchema = mongoose.Schema({
+const feedbackSchema =new mongoose.Schema({
   feedbackId: {
     type: Number,
     required: true,
@@ -33,6 +33,5 @@ const feedbackSchema = mongoose.Schema({
 });
 
 // Creating the Feedback model
-const Feedback = mongoose.model("Feedback", feedbackSchema);
-
+const Feedback = mongoose.model("Feedbacks", feedbackSchema);
 export default Feedback;

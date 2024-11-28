@@ -35,7 +35,7 @@ export function makeABooking(req, res) {
         })
         .catch((err) => {
           res.json({
-            message: "Booking creatiion failed",
+            message: "Booking creation failed",
             error: err,
           });
         });
