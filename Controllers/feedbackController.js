@@ -76,24 +76,46 @@ export function getAllFeedbacks(req, res) {
 }
 //Update feedback details-->Customers
 export function updateFeedbackDetails(req, res) {
-    if (!isCustomerValid(req)) {
-      res.json({
-        message: "Forbidden",
-      });
-      return;
-    }
-    const feedbackId = req.params.feedbackId;
-    Feedback.findOneAndUpdate({ feedbackId:feedbackId }, req.body)
-      .then(() => {
-        res.json({
-          message: "Feedback details updated successfully",
-        });
-      })
-      .catch(() => {
-        res.json({
-          message: "Failed to update feedback details",
-        });
-      });
+  if (!isCustomerValid(req)) {
+    res.json({
+      message: "Forbidden",
+    });
+    return;
   }
+  const feedbackId = req.params.feedbackId;
+  Feedback.findOneAndUpdate({ feedbackId: feedbackId }, req.body)
+    .then(() => {
+      res.json({
+        message: "Feedback details updated successfully",
+      });
+    })
+    .catch(() => {
+      res.json({
+        message: "Failed to update feedback details",
+      });
+    });
+}
 
-//Delete feedbacks
+//Delete feedbacks-->Admin
+export function deleteFeedback(req, res) {
+  if (!isAdminValid(req)) {
+    res.json({
+      message: "Forbidden!",
+    });
+    return;
+  }
+  const feedbackId = req.params.feedbackId;
+  Feedback.findOneAndDelete({ feedbackId: feedbackId })
+    .then((result) => {
+      res.json({
+        message: "Feedback deleted successfully!",
+        result: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        message: "Failed to delete the feedback!",
+        err: error,
+      });
+    });
+}
